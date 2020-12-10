@@ -142,9 +142,7 @@ router.delete('/myposts',login,(req,res)=>{
     {
         return res.status(422).json({error:err})
     }
-    if(post.postedby._id.toString()===req.user._id.toString())
-    {
-        post.remove()
+    post.remove()
         .then((result)=>{
             console.log(result)
             res.json(result)
@@ -152,8 +150,7 @@ router.delete('/myposts',login,(req,res)=>{
         .catch((err)=>{
             console.log(err)
         })
-    }
-    })
+    
 })
 
 router.get('/posts',login,(req,res)=>{
