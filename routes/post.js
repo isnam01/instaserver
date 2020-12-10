@@ -17,15 +17,14 @@ router.get('/allpost',login,(req,res)=>{
 })
 
 router.post('/createpost',login,(req,res)=>{
-    const {title,body,pic}=req.body
+    const {title,pic}=req.body
     console.log(req)
-    if(!title || !body)
+    if(!title)
     {
         res.status(422).json({"error":"Please add all fields"})
     }
     const post= new Post({
         title,
-        body,
         picture:pic,
         postedby:req.user._id
     })
@@ -52,7 +51,7 @@ router.get('/mypost',login,(req,res)=>{
 
 
 router.put('/like',login,(req,res)=>{
-    Post.findByIdAndUpdate(req.body.postId,{
+    Post.findByIdAndUpdate({_id:req.body.postId},{
         $push:{likes:req.user._id}
     },{
         new:true
@@ -71,7 +70,7 @@ router.put('/like',login,(req,res)=>{
     })
 })
 router.put('/unlike',login,(req,res)=>{
-    Post.findByIdAndUpdate(req.body.postId,{
+    Post.findByIdAndUpdate({_id:req.body.postId},{
         $pull:{likes:req.user._id}
     },{
         new:true
@@ -115,7 +114,7 @@ router.put('/comments',login,(req,res)=>{
 
 router.delete('/comments',login,(req,res)=>{
     
-    Post.findByIdAndUpdate(req.body.postId,{
+    Post.findByIdAndUpdate({_id:req.body.postId},{
         $pull:{comments:{_id:req.body.commId}}
     },{
         new:true
@@ -135,14 +134,15 @@ router.delete('/comments',login,(req,res)=>{
 
 router.delete('/myposts',login,(req,res)=>{
     console.log(req.body)
-    Post.findOne(req.body.postId)
+    Post.findOne({_id:req.body.postId})
     .populate('postedby',"_id name")
     .exec((err,post)=>{
     if(err || !post)
     {
         return res.status(422).json({error:err})
     }
-
+    if(post.postedby._id.toString()===req.user._id.toString())
+    {
         post.remove()
         .then((result)=>{
             console.log(result)
@@ -151,7 +151,7 @@ router.delete('/myposts',login,(req,res)=>{
         .catch((err)=>{
             console.log(err)
         })
-    
+    }
     })
 })
 
