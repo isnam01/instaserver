@@ -142,7 +142,8 @@ router.delete('/myposts',login,(req,res)=>{
     {
         return res.status(422).json({error:err})
     }
-    post.remove()
+
+        post.remove()
         .then((result)=>{
             console.log(result)
             res.json(result)
@@ -151,6 +152,7 @@ router.delete('/myposts',login,(req,res)=>{
             console.log(err)
         })
     
+    })
 })
 
 router.get('/posts',login,(req,res)=>{
