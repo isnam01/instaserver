@@ -6,6 +6,15 @@ const bcrypt=require("bcryptjs");
 const jwt=require('jsonwebtoken');
 const {JWT_SECRET}=require('../config/keys')
 const login=require('../middleware/requirelogin')
+const nodemailer=require("nodemailer");
+const sendgrid=require('nodemailer-sendgrid-transport');
+
+const transporter=nodemailer.createTransport(sendgrid({
+    auth:{
+        api_key:"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"
+    }
+}))
+
 
 router.get('/',(req,res)=>{
     res.send("hello");
@@ -33,6 +42,12 @@ router.post('/signup',(req,res)=>{
             })
             user.save()
             .then((user)=>{
+                transporter.sendMail({
+                    to:user.email,
+                    from:"no-reply@instagram.com",
+                    subject:"Signup Successful",
+                    html:"<h1>Welcome to Instagram</h1>"
+                })
                 res.json({message:"Saved Successfully"})
             })
             .catch((err)=>{

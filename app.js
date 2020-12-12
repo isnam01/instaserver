@@ -3,7 +3,7 @@ const app=express();
 const PORT=process.env.PORT || 5000;
 const mongoose=require('mongoose');
 const {MONGOURI} =require('./config/keys');
-const cors = require('cors')
+const cors = require('cors');
 
 app.use(cors())
 
