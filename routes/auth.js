@@ -44,7 +44,7 @@ router.post('/signup',(req,res)=>{
             .then((user)=>{
                 transporter.sendMail({
                     to:user.email,
-                    from:"no-reply@instagram.com",
+                    from:"no-reply@qwerty.com",
                     subject:"Signup Successful",
                     html:"<h1>Welcome to Instagram</h1>"
                 })
