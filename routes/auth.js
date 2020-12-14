@@ -11,8 +11,10 @@ const sendgrid=require('nodemailer-sendgrid-transport');
 const {SEND_API}=require('../config/keys')
 
 const transporter=nodemailer.createTransport(sendgrid({
+    service:'gmail',
     auth:{
-        api_key:SEND_API
+        user:"mansiqwerty01@gmail.com",
+        pass:"mansigupta@01"
     }
 }))
 
