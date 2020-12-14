@@ -9,14 +9,11 @@ const login=require('../middleware/requirelogin')
 const nodemailer=require("nodemailer");
 const sendgrid=require('nodemailer-sendgrid-transport');
 const {SEND_API}=require('../config/keys')
+const sgmail=require('@sendgrid/mail')
 
-const transporter=nodemailer.createTransport(sendgrid({
-    service:'gmail',
-    auth:{
-        user:"mansiqwerty01@gmail.com",
-        pass:"mansigupta@01"
-    }
-}))
+sgmail.setApiKey(SEND_API)
+
+
 
 
 router.get('/',(req,res)=>{
@@ -45,13 +42,21 @@ router.post('/signup',(req,res)=>{
             })
             user.save()
             .then((user)=>{
-                transporter.sendMail({
+                res.json({message:"Saved Successfully"})
+                const msg ={
                     to:user.email,
                     from:"mansiqwerty01@gmail.com",
                     subject:"Signup Successful",
                     html:"<h1>Welcome to Instagram</h1>"
+                }
+                sgmail
+                .send(msg)
+                .then(()=>{
+                    console.log("email sent")
                 })
-                res.json({message:"Saved Successfully"})
+                .catch((err)=>{
+                    console.log(error)
+                })
             })
             .catch((err)=>{
                 console.log(err)
