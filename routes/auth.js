@@ -8,11 +8,11 @@ const {JWT_SECRET}=require('../config/keys')
 const login=require('../middleware/requirelogin')
 const nodemailer=require("nodemailer");
 const sendgrid=require('nodemailer-sendgrid-transport');
-const {api_key}=require('../config/keys')
+const {SEND_API}=require('../config/keys')
 
 const transporter=nodemailer.createTransport(sendgrid({
     auth:{
-        api_key:api_key
+        api_key:SEND_API
     }
 }))
 
@@ -45,7 +45,7 @@ router.post('/signup',(req,res)=>{
             .then((user)=>{
                 transporter.sendMail({
                     to:user.email,
-                    from:"no-reply@qwerty.com",
+                    from:"mansiqwerty01@gmail.com",
                     subject:"Signup Successful",
                     html:"<h1>Welcome to Instagram</h1>"
                 })
