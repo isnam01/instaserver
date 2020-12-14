@@ -8,10 +8,11 @@ const {JWT_SECRET}=require('../config/keys')
 const login=require('../middleware/requirelogin')
 const nodemailer=require("nodemailer");
 const sendgrid=require('nodemailer-sendgrid-transport');
+const {api_key}=require('../config/keys')
 
 const transporter=nodemailer.createTransport(sendgrid({
     auth:{
-        api_key:"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"
+        api_key:api_key
     }
 }))
 
