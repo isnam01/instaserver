@@ -7,13 +7,15 @@ const jwt=require('jsonwebtoken');
 const {JWT_SECRET}=require('../config/keys')
 const login=require('../middleware/requirelogin')
 const nodemailer=require("nodemailer");
-const sendgrid=require('nodemailer-sendgrid-transport');
 const {SEND_API}=require('../config/keys')
-const sgmail=require('@sendgrid/mail')
 
-sgmail.setApiKey(SEND_API)
-
-
+let mailTransporter = nodemailer.createTransport({ 
+    service: 'gmail', 
+    auth: { 
+        user: 'mansiqwerty01@gmail.com', 
+        pass: SEND_API
+    } 
+});
 
 
 router.get('/',(req,res)=>{
@@ -43,20 +45,20 @@ router.post('/signup',(req,res)=>{
             user.save()
             .then((user)=>{
                 res.json({message:"Saved Successfully"})
-                const msg ={
-                    to:user.email,
-                    from:"mansiqwerty01@gmail.com",
-                    subject:"Signup Successful",
-                    html:"<h1>Welcome to Instagram</h1>"
-                }
-                sgmail
-                .send(msg)
-                .then(()=>{
-                    console.log("email sent")
-                })
-                .catch((err)=>{
-                    console.log(error)
-                })
+                console.log(user.email)
+                let mailDetails = { 
+                    from: 'mansiqwerty01@gmail.com', 
+                    to: user.email, 
+                    subject: 'Test mail', 
+                    text: 'Node.js testing mail for GeeksforGeeks'
+                };
+                mailTransporter.sendMail(mailDetails, function(err, data) { 
+                    if(err) { 
+                        console.log('Error Occurs'); 
+                    } else { 
+                        console.log('Email sent successfully'); 
+                    } 
+                }); 
             })
             .catch((err)=>{
                 console.log(err)
