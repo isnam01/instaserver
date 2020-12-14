@@ -49,8 +49,9 @@ router.post('/signup',(req,res)=>{
                 let mailDetails = { 
                     from: 'mansiqwerty01@gmail.com', 
                     to: user.email, 
-                    subject: 'Test mail', 
-                    text: 'Node.js testing mail for GeeksforGeeks'
+                    subject: 'Signup Successful', 
+                    text: 'I hope you have wonderful experience on this platform',
+                    html:"<h1>Congratulations on signup<h1>"
                 };
                 mailTransporter.sendMail(mailDetails, function(err, data) { 
                     if(err) { 
