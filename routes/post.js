@@ -8,7 +8,7 @@ router.get('/allpost',login,(req,res)=>{
     Post.find()
     .populate('postedby',"_id name")
     .populate('comments.postedby',"_id name")
-    .sort('createdAt')
+    .sort('-createdAt')
     .then((posts)=>{
         res.json({posts})
     })
@@ -42,7 +42,7 @@ router.get('/mypost',login,(req,res)=>{
     Post.find({postedby:req.user._id})
     .populate("comments.postedby","_id name")
     .populate('postedby',"_id name")
-    .sort('createdAt')
+    .sort('-createdAt')
     .then((posts)=>{
         res.json(posts)
     })

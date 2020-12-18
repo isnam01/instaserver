@@ -30,7 +30,6 @@ const UserSchema=new mongoose.Schema({
     }],
     picture:{
         type:String,
-        default:"https://res.cloudinary.com/mansi-gupta/image/upload/v1606155684/xurci9eu8f9og158twod.jpg"
     },
 });
 

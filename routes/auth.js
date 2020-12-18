@@ -24,11 +24,14 @@ router.get('/',(req,res)=>{
 });
 
 router.post('/signup',(req,res)=>{
-    const {name,email,password,pic}=req.body
-    console.log(req.body)
+    var {name,email,password,pic}=req.body
     if(!email || !password || !name)
     {
         return res.status(422).json({error:"Add all data"})
+    }
+    if(!pic)
+    {
+        pic="https://res.cloudinary.com/mansi-gupta/image/upload/v1606155684/xurci9eu8f9og158twod.jpg"
     }
    User.findOne({email:email})
    .then((savedUser)=>{
@@ -101,7 +104,7 @@ router.post('/signin',(req,res)=>{
     })
 })
 
-router.post('/resetpassword',login,(req,res)=>{
+router.post('/resetpassword',(req,res)=>{
     crypto.randomBytes(32,(err,buffer)=>{
         if(err)
         {
@@ -126,7 +129,7 @@ router.post('/resetpassword',login,(req,res)=>{
                         to: user.email, 
                         subject: 'Reset Password', 
                         text: 'Here is the link to reset your password',
-                        html:`<h1>Click on this link <a href="https://qwertians.netlify.app/reset/${token}">link</a><h1>`
+                        html:`<h1>Click on this link <a href="https://qwertians.netlify.app/resetpassword/${token}">link</a><h1>`
                     }
                     mailTransporter.sendMail(mailDetails, function(err, data) 
                     { 
@@ -140,6 +143,28 @@ router.post('/resetpassword',login,(req,res)=>{
                 res.json({message:"Reset passsword link has beensent to your mail"})
             })
         }
+    })
+})
+
+router.post('/newpassword',(req,res)=>{
+    const NewPassword=req.body.password
+    const sentToken=req.body.token
+    User.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
+    .then((user)=>{
+        if(!user)
+        {
+            return res.status(422).json({error:"Session Expired"})
+        }
+        bcrypt.hash(NewPassword,12).then(hashedPassword=>{
+            user.password=hashedPassword,
+            user.resetToken=undefined
+            user.expireToken=undefined,
+            user.save().then((saveduser)=>{
+                res.json({message:"Password updated Successfully"})
+            })
+        })
+    }).catch((err)=>{
+        console.log(err)
     })
 })
 
