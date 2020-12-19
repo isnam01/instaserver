@@ -124,12 +124,13 @@ router.post('/resetpassword',(req,res)=>{
                 user.save()
                 .then((result)=>
                 {
-                    let mailDetails = { 
+                    let mailDetails = 
+                    { 
                         from: 'mansiqwerty01@gmail.com', 
                         to: user.email, 
                         subject: 'Reset Password', 
                         text: 'Here is the link to reset your password',
-                        html:`<h1>Click on this link <a href="https://qwertians.netlify.app/resetpassword/${token}">link</a><h1>`
+                        html:`<h1>Click on this<a href="https://qwertians.netlify.app/resetpassword/${token}">link</a>to reset password .</h1>`
                     }
                     mailTransporter.sendMail(mailDetails, function(err, data) 
                     { 
@@ -140,7 +141,7 @@ router.post('/resetpassword',(req,res)=>{
                         } 
                     })
                 })
-                res.json({message:"Reset passsword link has beensent to your mail"})
+                res.json({message:"Reset passsword link has been sent to your mail"})
             })
         }
     })
