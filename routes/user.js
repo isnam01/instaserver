@@ -10,7 +10,7 @@ router.get('/user/:id',login,(req,res)=>{
     User.findOne({_id:req.params.id})
     .select("-password")
     .then((user)=>{
-        Post.find({postedby:req.params._id})
+        Post.find({postedby:req.params.id})
         .populate("postedby","_id name")
         .exec((err,posts)=>{
             if(err)
